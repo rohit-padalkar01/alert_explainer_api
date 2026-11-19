@@ -37,6 +37,11 @@ def get_alert(alert_id: int, db: Session = Depends(get_db)) -> Alert:
 @router.get("/{alert_id}/explain", response_model=ExplainResponse)
 @router.post("/{alert_id}/explain", response_model=ExplainResponse)
 def explain_alert(alert_id: int, db: Session = Depends(get_db)) -> ExplainResponse:
+    """Return an alert's explanation and generation timestamp.
+
+    Raises:
+        HTTPException: With status 404 if the alert does not exist.
+    """
     alert = db.query(Alert).filter(Alert.id == alert_id).first()
     if alert is None:
         raise HTTPException(status_code=404, detail="Alert not found")
